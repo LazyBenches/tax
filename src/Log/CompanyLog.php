@@ -7,7 +7,7 @@
  * Time: 15:27
  */
 
-namespace Application\Core\Components\Tax\Log;
+namespace LazyBench\Tax\Log;
 
 class CompanyLog extends Log
 {

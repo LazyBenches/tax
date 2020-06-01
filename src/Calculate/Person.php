@@ -7,15 +7,15 @@
  * Time: 18:59
  */
 
-namespace Application\Core\Components\Tax\Calculate;
+namespace LazyBench\Tax\Calculate;
 
-use Application\Core\Components\Constants\Tax;
-use Application\Core\Components\Tax\Log\PersonLog;
-use Application\Core\Components\Tax\Traits\CalculateTrait;
+use LazyBench\Tax\Constant\Tax;
+use LazyBench\Tax\Log\PersonLog;
+use LazyBench\Tax\Traits\Calculate;
 
 class Person
 {
-    use CalculateTrait;
+    use Calculate;
     const RATES = [
         0.07,
         0.03,

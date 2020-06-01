@@ -2,13 +2,13 @@
 
 namespace LazyBench\Tax\Traits;
 
-use LazyBench\Constants\Tax;
+use LazyBench\Tax\Constant\Tax;
 
 /**
  * Author:LazyBench
  * Date:2019/1/8
  */
-trait CalculateTrait
+trait Calculate
 {
     use SubTrait;
     /**

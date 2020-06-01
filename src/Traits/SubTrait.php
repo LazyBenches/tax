@@ -7,7 +7,7 @@
  * Time: 21:08
  */
 
-namespace Application\Core\Components\Tax\Traits;
+namespace LazyBench\Tax\Traits;
 
 trait SubTrait
 {
@@ -18,10 +18,13 @@ trait SubTrait
      * @return string
      * 向上保留
      */
-    protected function ceil($amount, $scale = 2)
+    protected function ceil($amount, $scale = 2): string
     {
-        $base = pow(10, $scale);
-        return bcdiv(ceil(bcmul($amount, $base, 1)), $base, $scale);
+        $array = explode('.', $amount);
+        $left = $array[1] ?? 0;
+        $newAmount = $array[0].'.'.($left > 0 ? 1 : 0);
+        $base = 10 ** $scale;
+        return bcdiv(ceil(bcmul($newAmount, $base, 1)), $base, $scale);
     }
 
     /**
@@ -33,7 +36,7 @@ trait SubTrait
      */
     protected function floor($amount, $scale = 2)
     {
-        $base = pow(10, $scale);
+        $base = 10 ** $scale;
         return bcdiv(floor(bcmul($amount, $base, 1)), $base, $scale);
     }
 }

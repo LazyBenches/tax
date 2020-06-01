@@ -7,16 +7,16 @@
  * Time: 15:06
  */
 
-namespace Application\Core\Components\Tax\Calculate;
+namespace LazyBench\Tax\Calculate;
 
-use Application\Core\Components\Constants\Tax;
-use Application\Core\Components\Logic\TaxCalculateLogic;
-use Application\Core\Components\Tax\Log\PersonLog;
-use Application\Core\Components\Tax\Traits\CalculateTrait;
+use LazyBench\Tax\Constant\Tax;
+use LazyBench\Logic\TaxCalculateLogic;
+use LazyBench\Tax\Log\PersonLog;
+use LazyBench\Tax\Traits\Calculate;
 
 class PersonIncomeBelow
 {
-    use CalculateTrait;
+    use Calculate;
     /**
      * Author:LazyBench
      *

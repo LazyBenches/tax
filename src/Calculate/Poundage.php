@@ -1,10 +1,10 @@
 <?php
 
-namespace Application\Core\Components\Tax\Calculate;
+namespace LazyBench\Tax\Calculate;
 
-use Application\Core\Components\Constants\Tax;
-use Application\Core\Components\Tax\Log\PoundageLog;
-use Application\Core\Components\Tax\Traits\CalculateTrait;
+use LazyBench\Tax\Constant\Tax;
+use LazyBench\Tax\Log\PoundageLog;
+use LazyBench\Tax\Traits\Calculate;
 
 /**
  * Author:LazyBench
@@ -12,7 +12,7 @@ use Application\Core\Components\Tax\Traits\CalculateTrait;
  */
 class Poundage
 {
-    use CalculateTrait;
+    use Calculate;
     //平台手续费
 
     protected $poundage;

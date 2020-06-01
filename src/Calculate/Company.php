@@ -1,10 +1,10 @@
 <?php
 
-namespace Application\Core\Components\Tax\Calculate;
+namespace LazyBench\Tax\Calculate;
 
-use Application\Core\Components\Constants\Tax;
-use Application\Core\Components\Tax\Log\CompanyLog;
-use Application\Core\Components\Tax\Traits\CalculateTrait;
+use LazyBench\Tax\Constant\Tax;
+use LazyBench\Tax\Log\CompanyLog;
+use LazyBench\Tax\Traits\Calculate;
 
 /**
  * Author:LazyBench
@@ -13,7 +13,7 @@ use Application\Core\Components\Tax\Traits\CalculateTrait;
  */
 class Company
 {
-    use CalculateTrait;
+    use Calculate;
     const RATES = [
         0.07,
         0.03,
@@ -21,7 +21,7 @@ class Company
     ];
 
 
-    protected $log = null;
+    protected $log;
     /**
      * Author:LazyBench
      * Date:2019/1/8
@@ -130,8 +130,7 @@ class Company
             return $this->companyAdditionalTax;
         }
         $total = $this->getCompanyValueAddedTax();
-        $addTaxExt = $this->getBasisRateTax($total);
-        return $addTaxExt;
+        return $this->getBasisRateTax($total);
     }
 
 

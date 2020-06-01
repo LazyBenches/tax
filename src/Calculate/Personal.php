@@ -1,10 +1,9 @@
 <?php
 
-namespace Application\Core\Components\Tax\Calculate;
+namespace LazyBench\Tax\Calculate;
 
-use Application\Core\Components\Constants\Tax;
-use Application\Core\Components\Tax\Traits\CalculateTrait;
-use Phalcon\DI\InjectionAwareInterface;
+use LazyBench\Tax\Constant\Tax;
+use LazyBench\Tax\Traits\Calculate;
 
 /**
  * Author:LazyBench
@@ -13,7 +12,7 @@ use Phalcon\DI\InjectionAwareInterface;
  */
 class Personal
 {
-    use CalculateTrait;
+    use Calculate;
     const RATES = [
         0.07,
         0.03,
@@ -257,7 +256,7 @@ class Personal
      */
     public function getPersonTax($wages)
     {
-//        $total = $this->getTaxReduction($wages);//扣除计算数
+        //        $total = $this->getTaxReduction($wages);//扣除计算数
         $taxTotal = $this->getPersonalTaxByCompany($this->taxBaseYearTotal);
         return bcsub($taxTotal, $this->lastPersonTax);
     }
@@ -285,36 +284,28 @@ class Personal
         if ($this->isAddExt) {
             $money = bcsub($money, $this->getTaxAddValue($money));
         }
-        $total = bcmul($money, Tax::RATE_DISCOUNT);
-        return $total;
+        return bcmul($money, Tax::RATE_DISCOUNT);
     }
 
     /**
-     * 个人所得税税率
-     * Author:lazyBench
+     * Author:LazyBench
      *
      * @param $total
-     * @return \Phalcon\Mvc\Model\ResultSetInterface|\ServiceChargeTable|\ServiceChargeTable[]
+     * @param array $getPersonalTaxRateSettings
+     * @return int|string
      */
-    protected function getPersonalTaxByCompany($total)
+    protected function getPersonalTaxByCompany($total, array $getPersonalTaxRateSettings)
     {
-        $getPersonalTaxRateSettings = \ServiceChargeTable::find([
-            'conditions' => '[from]<= :income: and company_id=0',
-            'bind' => [
-                'income' => $total,
-            ],
-            'order' => 'id ASC',
-        ]);
-        $maxLevel = sizeof($getPersonalTaxRateSettings);
+        $maxLevel = count($getPersonalTaxRateSettings);
         $taxTotal = 0;
         foreach ($getPersonalTaxRateSettings as $key => $getPersonalTaxRateSetting) {
             $currentLevel = $key + 1;
             if ($currentLevel === $maxLevel) {
                 $baseTaxTotal = $total;
             } else {
-                $baseTaxTotal = bcsub($getPersonalTaxRateSetting->to, $getPersonalTaxRateSetting->from);
+                $baseTaxTotal = bcsub($getPersonalTaxRateSetting['to'], $getPersonalTaxRateSetting['from']);
             }
-            $currentTax = bcmul($baseTaxTotal, $getPersonalTaxRateSetting->rate);
+            $currentTax = bcmul($baseTaxTotal, $getPersonalTaxRateSetting['rate']);
             $total = bcsub($total, $baseTaxTotal);
             $taxTotal = bcadd($taxTotal, $currentTax);
         }

@@ -7,7 +7,7 @@
  * Time: 15:52
  */
 
-namespace Application\Core\Components\Tax\Log;
+namespace LazyBench\Tax\Log;
 
 class PoundageLog extends Log
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Application\Core\Components\Tax\Calculate;
+namespace LazyBench\Tax\Calculate;
 
-use Application\Core\Components\Constants\Tax;
-use Application\Core\Components\Tax\Traits\CalculateTrait;
+use LazyBench\Tax\Constant\Tax;
+use LazyBench\Tax\Traits\Calculate;
 
 /**
  * Created by PhpStorm.
@@ -14,7 +14,7 @@ use Application\Core\Components\Tax\Traits\CalculateTrait;
  */
 class CompanyTotal
 {
-    use CalculateTrait;
+    use Calculate;
 
     const COMPANY_RATE = [
         'addTax' => 0.06,

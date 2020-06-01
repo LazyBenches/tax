@@ -1,0 +1,10 @@
+{
+    "name": "lazybench/tax",
+    "description": "tax",
+    "require": {
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.5"
+    },
+    "minimum-stability": "dev"
+}

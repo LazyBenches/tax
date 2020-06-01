@@ -9,7 +9,7 @@
  * 计税依据是按年累计
  */
 
-namespace Application\Core\Components\Tax\Log;
+namespace Lazybench\Tax\Log;
 
 class PersonLog extends Log
 {

@@ -7,7 +7,7 @@
  * Time: 14:15
  */
 
-namespace Application\Core\Components\Constants;
+namespace LazyBench\Tax\Constant;
 
 class Tax
 {

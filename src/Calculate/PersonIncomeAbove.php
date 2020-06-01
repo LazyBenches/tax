@@ -7,16 +7,16 @@
  * Time: 16:11
  */
 
-namespace Application\Core\Components\Tax\Calculate;
+namespace LazyBench\Tax\Calculate;
 
-use Application\Core\Components\Constants\Tax;
-use Application\Core\Components\Logic\TaxCalculateLogic;
-use Application\Core\Components\Tax\Log\PersonLog;
-use Application\Core\Components\Tax\Traits\CalculateTrait;
+use LazyBench\Tax\Constant\Tax;
+use LazyBench\Logic\TaxCalculate;
+use LazyBench\Tax\Log\PersonLog;
+use LazyBench\Tax\Traits\Calculate;
 
 class PersonIncomeAbove
 {
-    use CalculateTrait;
+    use Calculate;
     /**
      * Author:LazyBench
      *
@@ -36,14 +36,14 @@ class PersonIncomeAbove
     public function handle($personWages)
     {
         $log = TaxCalculateLogic::getPersonData($personWages, $this->log->idCard, $this->log->month);
-        $log->personIncomeLeft = $this->floor($log->personIncomeLeft,3);
+        $log->personIncomeLeft = $this->floor($log->personIncomeLeft, 3);
         $compare = bcsub($log->personIncomeLeft, $this->log->personIncomeLeft, Tax::SCALE);
-        if ($this->floor($compare, 3) == 0) {
+        if (!$this->floor($compare, 3)) {
             return $log;
         }
         $method = $compare < 0 ? 'bcsub' : 'bcadd';
         $i = 0;
-        if ($compare != 0) {
+        if ($compare !== 0) {
             while (true) {
                 $i++;
                 if ($i > 100) {
@@ -52,12 +52,12 @@ class PersonIncomeAbove
                 $diff = $compare / 2;
                 $personWages = $method($personWages, $diff, Tax::SCALE);
                 $log = TaxCalculateLogic::getPersonData($personWages, $this->log->idCard, $this->log->month);
-                $log->personIncomeLeft = $this->floor($log->personIncomeLeft,3);
+                $log->personIncomeLeft = $this->floor($log->personIncomeLeft, 3);
                 $compare = bcSub($log->personIncomeLeft, $this->log->personIncomeLeft, Tax::SCALE);
                 if ($compare > 0 && bccomp($compare / 2, $diff, Tax::SCALE) === 1) {
                     $compare = bcSub($this->log->personIncomeLeft, $log->personIncomeLeft, Tax::SCALE);
                 }
-                if ($this->floor($compare, 3) == 0) {
+                if (!$this->floor($compare, 3)) {
                     break;
                 }
             }

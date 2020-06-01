@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Core\Components\Tax\Log;
+namespace LazyBench\Tax\Log;
 
 /**
  * Author:LazyBench
