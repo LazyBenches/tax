@@ -48,7 +48,7 @@ class Poundage
      * @param $rate
      * @return string
      */
-    protected function getPoundage($rate)
+    protected function getPoundage($rate):string
     {
         if ($this->poundage) {
             return $this->poundage;

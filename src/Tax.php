@@ -7,7 +7,7 @@
  * Time: 12:46
  */
 
-namespace Application\Core\Components\Logic;
+namespace LazyBench\Tax;
 
 use LazyBench\Tax\Constant\Tax as TaxConst;
 use LazyBench\Tax\Calculate\Company;
@@ -15,14 +15,46 @@ use LazyBench\Tax\Calculate\Person;
 use LazyBench\Tax\Calculate\PersonIncomeAbove;
 use LazyBench\Tax\Calculate\PersonIncomeBelow;
 use LazyBench\Tax\Calculate\Poundage;
+use LazyBench\Tax\Interfaces\UserMonth;
 use LazyBench\Tax\Log\CompanyLog;
 use LazyBench\Tax\Log\PersonLog;
 use LazyBench\Tax\Log\PoundageLog;
-use LazyBench\Tax\Traits\Calculate as CalculateTrait;
+use LazyBench\Tax\Traits\Calculate;
 
 class Tax
 {
-    use CalculateTrait;
+    use Calculate;
+    protected $config;
+    /**
+     * Author:LazyBench
+     *
+     * @var UserMonth
+     */
+    protected $statistics;
+
+    public function __construct(array $config)
+    {
+        $this->setConfig($config);
+    }
+
+    public function setConfig(array $config)
+    {
+        $this->config = $config;
+        isset($this->config['person']['statistics']) && $this->statistics = new $this->config['person']['statistics'];
+        isset($this->config['person']['monthModel']) && $this->statistics->setModel($this->config['person']['monthModel']);
+        isset($this->config['person']['rateModel']) && $this->statistics->setRateModel($this->config['person']['rateModel']);
+        return $this;
+    }
+
+    /**
+     * Author:LazyBench
+     *
+     * @return UserMonth
+     */
+    public function getStatistics(): UserMonth
+    {
+        return $this->statistics;
+    }
 
     /**
      * Author:LazyBench
@@ -35,7 +67,7 @@ class Tax
     public function getPersonData($personWages, $card = '', $month = ''): PersonLog
     {
         if ($card && $month) {
-            $data = $this->getStaticMonth($personWages, $card, $month);
+            $data = $this->statistics->getStaticMonth($personWages, $card, $month);
         }
         $log = new PersonLog();
         $log->idCard = $card ?? '';

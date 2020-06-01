@@ -11,10 +11,10 @@ namespace LazyBench\Tax\Constant;
 
 class Tax
 {
-    const RATE_DISCOUNT = 0.12;
-    const TAX_EXT_REDUCE = 0.5;
-    const SCALE = 8;
-    const ROW_MAP = [
+    public const RATE_DISCOUNT = 0.12;
+    public const TAX_EXT_REDUCE = 0.5;
+    public const SCALE = 8;
+    public const ROW_MAP = [
         5 => [-30000, 30000],
         10 => [30000, 90000],
         20 => [90000, 300000],
@@ -22,7 +22,7 @@ class Tax
         35 => [500000, 1000000000],
     ];
 
-    const RATE_MAP = [
+    public const RATE_MAP = [
         '5' => 0,
         '10' => 1500,
         '20' => 10500,

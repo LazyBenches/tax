@@ -31,6 +31,7 @@ trait Calculate
      */
     protected $addTaxExtReduceDetail = [];
 
+    protected $rates;
 
     /**
      * 计税依据
@@ -71,7 +72,7 @@ trait Calculate
     {
         $this->addTaxExtDetail = [];
         $tax = 0;
-        foreach (self::RATES as $rate) {
+        foreach ($this->rates as $rate) {
             $this->addTaxExtDetail["{$rate}"] = bcmul($total, $rate, Tax::SCALE);
             $tax = bcadd($tax, $this->addTaxExtDetail["{$rate}"], Tax::SCALE);
         }

@@ -7,14 +7,21 @@
  * Time: 13:46
  */
 return [
-    'companyRate'=>[
-        0.07,
-        0.03,
-        0.02,
+    'person' => [
+        'rate' => [
+            '1' => 0.07,
+            '2' => 0.03,
+            '3' => 0.02,
+        ],
+        'monthModel' => \LazyBench\Tax\Model\UserMonth::class,
+        'statistics' => \LazyBench\Tax\Statistics\UserMonth::class,
+        'rateModel' => \LazyBench\Tax\Model\TaxRate::class,
     ],
-    'personRate'=>[
-        0.07,
-        0.03,
-        0.02,
-    ]
+    'company' => [
+        'rate' => [
+            '1' => 0.07,
+            '2' => 0.03,
+            '3' => 0.02,
+        ],
+    ],
 ];
