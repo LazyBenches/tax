@@ -80,6 +80,8 @@ class Tax
         $person = new Person($log);
         $person->setRates($this->config['person']['rate']);
         $person->setTaxExtReduceRate($this->config['person']['taxExtReduceRate']);
+        $person->setBasisTax($this->config['person']['basisTax']);
+        $person->setBasisTaxYear($this->config['person']['basisTaxYear']);
         $person->handle($getPersonalTaxRateSettings);
         return $log;
     }
@@ -134,11 +136,12 @@ class Tax
         $log->isAdd = $isAdd;
         $log->idCard = $card;
         $log->month = $month;
-        $personIncome = new PersonIncomeBelow($log);
-        $personIncome->setRates($this->config['person']['rate']);
-        $personIncome->setTaxExtReduceRate($this->config['person']['taxExtReduceRate']);
-        $log = $personIncome->handle();
-        return $log;
+        $person = new PersonIncomeBelow($log);
+        $person->setRates($this->config['person']['rate']);
+        $person->setTaxExtReduceRate($this->config['person']['taxExtReduceRate']);
+        $person->setBasisTax($this->config['person']['basisTax']);
+        $person->setBasisTaxYear($this->config['person']['basisTaxYear']);
+        return $person->handle();
     }
 
     /**
@@ -157,11 +160,12 @@ class Tax
         $log->isAdd = 1;
         $log->idCard = $card;
         $log->month = $month;
-        $above = new PersonIncomeAbove($log);
-        $above->setRates($this->config['person']['rate']);
-        $above->setTaxExtReduceRate($this->config['person']['taxExtReduceRate']);
-        $log = $above->handle($max);
-        return $log;
+        $person = new PersonIncomeAbove($log);
+        $person->setRates($this->config['person']['rate']);
+        $person->setTaxExtReduceRate($this->config['person']['taxExtReduceRate']);
+        $person->setBasisTax($this->config['person']['basisTax']);
+        $person->setBasisTaxYear($this->config['person']['basisTaxYear']);
+        return $person->handle($max);
     }
 
 

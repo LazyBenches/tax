@@ -11,6 +11,10 @@ use LazyBench\Tax\Constant\Tax;
 trait Calculate
 {
     use SubTrait;
+
+    protected static $basisTax = 100000;//月税基数
+    protected static $basisTaxYear = 1200000;//年税基数
+
     /**
      * 计税依据
      * Author:LazyBench
@@ -122,5 +126,26 @@ trait Calculate
             $tax = bcadd($tax, $this->addTaxExtReduceDetail[$key], Tax::SCALE);
         }
         return $tax;
+    }
+
+
+    public function setBasisTax($basisTax)
+    {
+        self::$basisTax = $basisTax;
+    }
+
+    public function setBasisTaxYear($basisTaxYear)
+    {
+        self::$basisTaxYear = $basisTaxYear;
+    }
+
+    public static function getBasisTax()
+    {
+        return self::$basisTax;
+    }
+
+    public static function getBasisTaxYear()
+    {
+        return self::$basisTaxYear;
     }
 }

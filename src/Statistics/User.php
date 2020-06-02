@@ -26,11 +26,11 @@ class User
      */
     public function isAddTax($basis, $taxBasis = 0): int
     {
-        $isAddTax = ($basis > Person::BASIS_TAX) ?: false;//是否缴纳增值附加
+        $isAddTax = ($basis > Person::getBasisTax()) ?: false;//是否缴纳增值附加
         if ($isAddTax) {
             return 1;
         }
-        if (bcadd($taxBasis, $basis, 2) > Person::BASIS_TAX_YEAR) {
+        if (bcadd($taxBasis, $basis, 2) > Person::getBasisTaxYear()) {
             return 1;
         }
         return 0;

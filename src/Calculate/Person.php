@@ -17,9 +17,6 @@ class Person
 {
     use Calculate;
 
-    const BASIS_TAX = 100000;//月税基数
-    const BASIS_TAX_YEAR = 1200000;//年税基数
-
     /**
      * Author:LazyBench
      * 附加税减免
@@ -359,4 +356,5 @@ class Person
         }
         return $taxTotal;
     }
+
 }

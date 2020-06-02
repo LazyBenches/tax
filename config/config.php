@@ -15,6 +15,8 @@ return [
         ],
         'statistics' => \LazyBench\Tax\Statistics\UserMonth::class,
         'taxExtReduceRate' => 0,//增值附加税减免比
+        'basisTax' => 100000,//月税基数
+        'basisTaxYear' => 1200000//年税基数
     ],
     'company' => [
         'rate' => [
