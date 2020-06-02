@@ -17,7 +17,6 @@ class Person
 {
     use Calculate;
 
-    const REDUCE_EXT_RATE = 0.5;
     const BASIS_TAX = 100000;//月税基数
     const BASIS_TAX_YEAR = 1200000;//年税基数
 
@@ -111,14 +110,15 @@ class Person
 
     /**
      * Author:LazyBench
-     * 计算
+     *
+     * @param $taxRateTable
      * @return PersonLog
      */
-    public function handle($getPersonalTaxRateSettings): PersonLog
+    public function handle($taxRateTable): PersonLog
     {
         $this->getAddTax();//初始化增值税
         $this->getAddTaxExt();//初始化增值税附加
-        $this->getPersonTax($getPersonalTaxRateSettings);
+        $this->getPersonTax($taxRateTable);
         $this->log->isAdd = $this->isAdd;
         $this->log->personWages = $this->personWages;
         $this->log->personWagesLeft = bcsub($this->personWages, $this->log->monthTotal->tax_wages ?? 0, Tax::SCALE);
@@ -316,17 +316,17 @@ class Person
 
     /**
      * Author:LazyBench
-     * @param $getPersonalTaxRateSettings array
+     * @param $taxRateTable array
      * @return string
      * 个人所得税
      */
-    protected function getPersonTax($getPersonalTaxRateSettings)
+    protected function getPersonTax($taxRateTable)
     {
         if ($this->personTax) {
             return $this->personTax;
         }
         $total = bcadd($this->taxBaseYearLastMonthTotal, $this->getTaxBaseMonth(), Tax::SCALE);
-        $this->personTaxTotal = $this->getPersonalTaxTotal($total, $getPersonalTaxRateSettings);
+        $this->personTaxTotal = $this->getPersonalTaxTotal($total, $taxRateTable);
         $this->personTax = bcsub($this->personTaxTotal, $this->personTaxLastTotal, Tax::SCALE);
         return $this->personTax;
     }
@@ -336,14 +336,14 @@ class Person
      * Author:LazyBench
      * 个人所得税税率计算个人所得税
      * @param  $total
-     * @param  $taxRates
+     * @param  $taxRateTable
      * @return int|string
      */
-    protected function getPersonalTaxTotal($total, $taxRates)
+    protected function getPersonalTaxTotal($total, $taxRateTable)
     {
         $taxTotal = 0;
         $compare = $total;
-        foreach ($taxRates as $key => $taxRate) {
+        foreach ($taxRateTable as $key => $taxRate) {
             if ($taxRate['from'] > $compare) {
                 break;
             }
