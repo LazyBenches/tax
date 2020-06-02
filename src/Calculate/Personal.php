@@ -202,8 +202,7 @@ class Personal
     public function getTaxAddExt($wages)
     {
         $total = $this->getTaxAddValue($wages);
-        $return = $this->getBasisRateTax($total);
-        return $return['total'];
+        return $this->getBasisRateTax($total);
     }
 
     /**

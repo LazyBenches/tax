@@ -16,8 +16,6 @@ class UserMonth implements \LazyBench\Tax\Interfaces\UserMonth
     protected $card;
     protected $month;
     protected $personWages;
-    protected $monthModel;
-    protected $rateModel;
     protected $data = [
         'taxBaseYearLastMonthTotal' => 0.00,
         'personTaxLastTotal' => 0.00,
@@ -25,23 +23,6 @@ class UserMonth implements \LazyBench\Tax\Interfaces\UserMonth
         'isAdd' => 0,
     ];
 
-    public function setModel($model)
-    {
-        $this->monthModel = $model;
-        return $this;
-    }
-
-    /**
-     * Author:LazyBench
-     * 设置费率model
-     * @param $model
-     * @return mixed
-     */
-    public function setRateModel($model)
-    {
-        $this->rateModel = $model;
-        return $this;
-    }
 
     /**
      * Author:LazyBench
@@ -126,11 +107,13 @@ class UserMonth implements \LazyBench\Tax\Interfaces\UserMonth
      * 获取当前月统计
      * @param $card
      * @param $month
-     * @return mixed
+     * @return array
      */
-    public function getThisMonth($card, $month)
+    public function getThisMonth($card, $month): array
     {
-        return '';
+        return [
+            'taxWages' => 0,
+        ];
     }
 
 
@@ -141,7 +124,7 @@ class UserMonth implements \LazyBench\Tax\Interfaces\UserMonth
             $taxBaseYearLastMonthTotal = $this->getTaxBaseYearTotal($card, $month);
             $personTaxLastTotal = $this->getLastPersonTaxTotal($card, $month);
             $thisMonth = $this->getThisMonth($card, $month);
-            $personWages = bcadd($personWages, $thisMonth->taxWages, Tax::SCALE);//月累计税前
+            $personWages = bcadd($personWages, $thisMonth['taxWages'], Tax::SCALE);//月累计税前
             $basis = $this->getTaxBasis($personWages);
             $isAdd = $user->isAddTax($basis, $this->getTaxBaseLastTenMonth($card, $month));
             $this->card = $card;
@@ -154,5 +137,23 @@ class UserMonth implements \LazyBench\Tax\Interfaces\UserMonth
             ];
         }
         return $this->data;
+    }
+
+    /**
+     * Author:LazyBench
+     * 获取个人所得税率表
+     * @param $total
+     * @return array|mixed
+     */
+    public function getPersonalTaxRate($total)
+    {
+        //        $getPersonalTaxRateSettings = \ServiceChargeTable::find([
+        //            'conditions' => '[from]<= :income: and company_id=0',
+        //            'bind' => [
+        //                'income' => $total,
+        //            ],
+        //            'order' => 'id ASC',
+        //        ])->toArray();
+        return [];
     }
 }

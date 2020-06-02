@@ -14,12 +14,6 @@ use LazyBench\Tax\Traits\Calculate;
 class Company
 {
     use Calculate;
-    const RATES = [
-        0.07,
-        0.03,
-        0.02,
-    ];
-
 
     protected $log;
     /**

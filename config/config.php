@@ -13,9 +13,7 @@ return [
             '2' => 0.03,
             '3' => 0.02,
         ],
-        'monthModel' => \LazyBench\Tax\Model\UserMonth::class,
         'statistics' => \LazyBench\Tax\Statistics\UserMonth::class,
-        'rateModel' => \LazyBench\Tax\Model\TaxRate::class,
     ],
     'company' => [
         'rate' => [

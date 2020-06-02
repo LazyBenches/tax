@@ -16,11 +16,7 @@ use LazyBench\Tax\Traits\Calculate;
 class Person
 {
     use Calculate;
-    const RATES = [
-        0.07,
-        0.03,
-        0.02,
-    ];
+
     const REDUCE_EXT_RATE = 0.5;
     const BASIS_TAX = 100000;//月税基数
     const BASIS_TAX_YEAR = 1200000;//年税基数
@@ -30,7 +26,7 @@ class Person
      * 附加税减免
      * @var
      */
-    protected $reduceAddTaxExt = null;
+    protected $reduceAddTaxExt;
 
     /**
      * Author:LazyBench
@@ -98,7 +94,7 @@ class Person
      *
      * @var PersonLog|null
      */
-    protected $log = null;
+    protected $log;
 
     /**
      * Person constructor.
@@ -118,11 +114,11 @@ class Person
      * 计算
      * @return PersonLog
      */
-    public function handle()
+    public function handle($getPersonalTaxRateSettings): PersonLog
     {
         $this->getAddTax();//初始化增值税
         $this->getAddTaxExt();//初始化增值税附加
-        $this->getPersonTax();
+        $this->getPersonTax($getPersonalTaxRateSettings);
         $this->log->isAdd = $this->isAdd;
         $this->log->personWages = $this->personWages;
         $this->log->personWagesLeft = bcsub($this->personWages, $this->log->monthTotal->tax_wages ?? 0, Tax::SCALE);
@@ -204,8 +200,7 @@ class Person
     {
         $money = bcsub($personWages, $this->getAddTax(), Tax::SCALE);
         $money = bcsub($money, $this->getAddTaxReduction(), Tax::SCALE);
-        $taxBase = bcmul($money, Tax::RATE_DISCOUNT, Tax::SCALE);
-        return $taxBase;
+        return bcmul($money, Tax::RATE_DISCOUNT, Tax::SCALE);
     }
 
     /**
@@ -321,16 +316,17 @@ class Person
 
     /**
      * Author:LazyBench
+     * @param $getPersonalTaxRateSettings array
      * @return string
      * 个人所得税
      */
-    protected function getPersonTax()
+    protected function getPersonTax($getPersonalTaxRateSettings)
     {
         if ($this->personTax) {
             return $this->personTax;
         }
         $total = bcadd($this->taxBaseYearLastMonthTotal, $this->getTaxBaseMonth(), Tax::SCALE);
-        $this->personTaxTotal = $this->getPersonalTaxByCompany($total);
+        $this->personTaxTotal = $this->getPersonalTaxByCompany($total, $getPersonalTaxRateSettings);
         $this->personTax = bcsub($this->personTaxTotal, $this->personTaxLastTotal, Tax::SCALE);
         return $this->personTax;
     }
@@ -340,27 +336,21 @@ class Person
      * Author:LazyBench
      * 个人所得税税率计算个人所得税
      * @param  $total
+     * @param  $getPersonalTaxRateSettings
      * @return int|string
      */
-    protected function getPersonalTaxByCompany($total)
+    protected function getPersonalTaxByCompany($total, $getPersonalTaxRateSettings)
     {
-        $getPersonalTaxRateSettings = \ServiceChargeTable::find([
-            'conditions' => '[from]<= :income: and company_id=0',
-            'bind' => [
-                'income' => $total,
-            ],
-            'order' => 'id ASC',
-        ]);
-        $maxLevel = sizeof($getPersonalTaxRateSettings);
+        $maxLevel = count($getPersonalTaxRateSettings);
         $taxTotal = 0;
         foreach ($getPersonalTaxRateSettings as $key => $getPersonalTaxRateSetting) {
             $currentLevel = $key + 1;
             if ($currentLevel === $maxLevel) {
                 $baseTaxTotal = $total;
             } else {
-                $baseTaxTotal = bcsub($getPersonalTaxRateSetting->to, $getPersonalTaxRateSetting->from, Tax::SCALE);
+                $baseTaxTotal = bcsub($getPersonalTaxRateSetting['to'], $getPersonalTaxRateSetting['from'], Tax::SCALE);
             }
-            $currentTax = bcmul($baseTaxTotal, $getPersonalTaxRateSetting->rate, Tax::SCALE);
+            $currentTax = bcmul($baseTaxTotal, $getPersonalTaxRateSetting['rate'], Tax::SCALE);
             $total = bcsub($total, $baseTaxTotal, Tax::SCALE);
             $taxTotal = bcadd($taxTotal, $currentTax, Tax::SCALE);
         }

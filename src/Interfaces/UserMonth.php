@@ -12,21 +12,6 @@ namespace LazyBench\Tax\Interfaces;
 
 interface UserMonth
 {
-    /**
-     * Author:LazyBench
-     * 设置统计model
-     * @param $model
-     * @return mixed
-     */
-    public function setModel($model);
-
-    /**
-     * Author:LazyBench
-     * 设置费率model
-     * @param $model
-     * @return mixed
-     */
-    public function setRateModel($model);
 
     /**
      * Author:LazyBench
@@ -93,5 +78,21 @@ interface UserMonth
      */
     public function getTaxBasis($amount = 0);
 
+    /**
+     * Author:LazyBench
+     *
+     * @param $personWages
+     * @param $card
+     * @param $month
+     * @return mixed
+     */
     public function getStaticMonth($personWages, $card, $month);
+
+    /**
+     * Author:LazyBench
+     *
+     * @param $personWage
+     * @return mixed
+     */
+    public function getPersonalTaxRate($personWage);
 }

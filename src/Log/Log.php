@@ -6,11 +6,15 @@ namespace LazyBench\Tax\Log;
  * Author:LazyBench
  * Date:2019/1/11
  */
-class Log
+abstract class Log
 {
 
-
-    public function toArray()
+    /**
+     * Author:LazyBench
+     *
+     * @return array
+     */
+    public function toArray(): array
     {
         return get_object_vars($this);
     }

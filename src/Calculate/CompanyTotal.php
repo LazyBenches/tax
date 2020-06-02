@@ -35,9 +35,9 @@ class CompanyTotal
      * @param $poundageRate
      * @return string|null
      */
-    public function personalWages($amount, $poundageRate)
+    public function personalWages($amount, $poundageRate): string
     {
-        $addTaxExtRate = bcadd(array_sum(self::RATES), 0, 3);
+        $addTaxExtRate = bcadd(array_sum($this->rates), 0, 3);
         //   企业实际支付 = 企业增值 C2+ 企业增值附加 C3 +  企业印花 C4 + 企业发放金额 C5
         $C5 = 1;//企业发放金额
         $C2 = self::COMPANY_RATE['addTax'];//企业增值 = C5*0.006

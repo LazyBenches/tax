@@ -41,8 +41,6 @@ class Tax
     {
         $this->config = $config;
         isset($this->config['person']['statistics']) && $this->statistics = new $this->config['person']['statistics'];
-        isset($this->config['person']['monthModel']) && $this->statistics->setModel($this->config['person']['monthModel']);
-        isset($this->config['person']['rateModel']) && $this->statistics->setRateModel($this->config['person']['rateModel']);
         return $this;
     }
 
@@ -69,6 +67,7 @@ class Tax
         if ($card && $month) {
             $data = $this->statistics->getStaticMonth($personWages, $card, $month);
         }
+        $getPersonalTaxRateSettings = $this->statistics->getPersonalTaxRate($personWages);
         $log = new PersonLog();
         $log->idCard = $card ?? '';
         $log->month = $month ?? '';
@@ -79,7 +78,8 @@ class Tax
         $log->taxBaseYearLastMonthTotal = $data['taxBaseYearLastMonthTotal'] ?? 0;
         $log->personTaxLastTotal = $data['personTaxLastTotal'] ?? 0;
         $person = new Person($log);
-        $person->handle();
+        $person->setRates($this->config['person']['rate']);
+        $person->handle($getPersonalTaxRateSettings);
         return $log;
     }
 
@@ -94,6 +94,7 @@ class Tax
         $log = new CompanyLog();
         $log->personWages = $personWages;
         $company = new Company($log);
+        $company->setRates($this->config['company']['rate']);
         $company->handle();
         return $log;
     }
@@ -132,6 +133,7 @@ class Tax
         $log->idCard = $card;
         $log->month = $month;
         $personIncome = new PersonIncomeBelow($log);
+        $personIncome->setRates($this->config['person']['rate']);
         $log = $personIncome->handle();
         return $log;
     }
@@ -153,6 +155,7 @@ class Tax
         $log->idCard = $card;
         $log->month = $month;
         $above = new PersonIncomeAbove($log);
+        $above->setRates($this->config['person']['rate']);
         $log = $above->handle($max);
         return $log;
     }

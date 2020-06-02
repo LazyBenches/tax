@@ -34,13 +34,25 @@ trait Calculate
     protected $rates;
 
     /**
+     * Author:LazyBench
+     *
+     * @param array $rates
+     * @return $this
+     */
+    public function setRates(array $rates)
+    {
+        $this->rates = $rates;
+        return $this;
+    }
+
+    /**
      * 计税依据
      * Author:LazyBench
      * @param $amount
      * @return string
      * 企业发放金额/1.03
      */
-    public function setTaxBasis($amount)
+    public function setTaxBasis($amount): string
     {
         if (!$this->taxBasis) {
             $this->taxBasis = bcdiv($amount, 1.03, Tax::SCALE);
@@ -65,10 +77,10 @@ trait Calculate
     /**
      * Author:LazyBench
      * @param $total
-     * @return array
+     * @return string
      * 计税依据（0.0002,0.0003,0.0007）
      */
-    public function getBasisRateTax($total)
+    public function getBasisRateTax($total): string
     {
         $this->addTaxExtDetail = [];
         $tax = 0;
