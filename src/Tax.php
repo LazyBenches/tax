@@ -67,18 +67,19 @@ class Tax
         if ($card && $month) {
             $data = $this->statistics->getStaticMonth($personWages, $card, $month);
         }
-        $getPersonalTaxRateSettings = $this->statistics->getPersonalTaxRate($personWages);
+        $getPersonalTaxRateSettings = $this->statistics->getPersonalTaxRate();
         $log = new PersonLog();
         $log->idCard = $card ?? '';
         $log->month = $month ?? '';
         $log->monthTotal = $data['thisMonth'] ?? null;
         $log->isAdd = $data['isAdd'] ?? 0;
-        $personWagesAlready = $data['thisMonth']->tax_wages ?? 0;
+        $personWagesAlready = $data['thisMonth']['taxWages'] ?? 0;
         $log->personWages = bcadd($personWages, $personWagesAlready, TaxConst::SCALE);
         $log->taxBaseYearLastMonthTotal = $data['taxBaseYearLastMonthTotal'] ?? 0;
         $log->personTaxLastTotal = $data['personTaxLastTotal'] ?? 0;
         $person = new Person($log);
         $person->setRates($this->config['person']['rate']);
+        $person->setTaxExtReduceRate($this->config['person']['taxExtReduceRate']);
         $person->handle($getPersonalTaxRateSettings);
         return $log;
     }
@@ -95,6 +96,7 @@ class Tax
         $log->personWages = $personWages;
         $company = new Company($log);
         $company->setRates($this->config['company']['rate']);
+        $company->setTaxExtReduceRate($this->config['company']['taxExtReduceRate']);
         $company->handle();
         return $log;
     }
@@ -134,6 +136,7 @@ class Tax
         $log->month = $month;
         $personIncome = new PersonIncomeBelow($log);
         $personIncome->setRates($this->config['person']['rate']);
+        $personIncome->setTaxExtReduceRate($this->config['person']['taxExtReduceRate']);
         $log = $personIncome->handle();
         return $log;
     }
@@ -156,6 +159,7 @@ class Tax
         $log->month = $month;
         $above = new PersonIncomeAbove($log);
         $above->setRates($this->config['person']['rate']);
+        $above->setTaxExtReduceRate($this->config['person']['taxExtReduceRate']);
         $log = $above->handle($max);
         return $log;
     }

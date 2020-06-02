@@ -31,7 +31,18 @@ trait Calculate
      */
     protected $addTaxExtReduceDetail = [];
 
+    /**
+     * Author:LazyBench
+     * 自增附加税率表
+     * @var array
+     */
     protected $rates;
+    /**
+     * Author:LazyBench
+     * 增值附加税减免比
+     * @var
+     */
+    protected $taxExtReduceRate = 0;
 
     /**
      * Author:LazyBench
@@ -42,6 +53,12 @@ trait Calculate
     public function setRates(array $rates)
     {
         $this->rates = $rates;
+        return $this;
+    }
+
+    public function setTaxExtReduceRate(string $rate)
+    {
+        $this->taxExtReduceRate = $rate;
         return $this;
     }
 
@@ -84,9 +101,9 @@ trait Calculate
     {
         $this->addTaxExtDetail = [];
         $tax = 0;
-        foreach ($this->rates as $rate) {
-            $this->addTaxExtDetail["{$rate}"] = bcmul($total, $rate, Tax::SCALE);
-            $tax = bcadd($tax, $this->addTaxExtDetail["{$rate}"], Tax::SCALE);
+        foreach ($this->rates as $key => $rate) {
+            $this->addTaxExtDetail[$key] = bcmul($total, $rate, Tax::SCALE);
+            $tax = bcadd($tax, $this->addTaxExtDetail[$key], Tax::SCALE);
         }
         return $tax;
     }
@@ -100,9 +117,9 @@ trait Calculate
     {
         $this->addTaxExtReduceDetail = [];
         $tax = 0;
-        foreach ($this->addTaxExtDetail as $rate => $value) {
-            $this->addTaxExtReduceDetail["{$rate}"] = bcmul($value, Tax::TAX_EXT_REDUCE, Tax::SCALE);
-            $tax = bcadd($tax, $this->addTaxExtReduceDetail["{$rate}"], Tax::SCALE);
+        foreach ($this->addTaxExtDetail as $key => $value) {
+            $this->addTaxExtReduceDetail[$key] = bcmul($value, $this->taxExtReduceRate, Tax::SCALE);//Tax::TAX_EXT_REDUCE
+            $tax = bcadd($tax, $this->addTaxExtReduceDetail[$key], Tax::SCALE);
         }
         return $tax;
     }

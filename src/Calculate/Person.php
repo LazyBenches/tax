@@ -326,7 +326,7 @@ class Person
             return $this->personTax;
         }
         $total = bcadd($this->taxBaseYearLastMonthTotal, $this->getTaxBaseMonth(), Tax::SCALE);
-        $this->personTaxTotal = $this->getPersonalTaxByCompany($total, $getPersonalTaxRateSettings);
+        $this->personTaxTotal = $this->getPersonalTaxTotal($total, $getPersonalTaxRateSettings);
         $this->personTax = bcsub($this->personTaxTotal, $this->personTaxLastTotal, Tax::SCALE);
         return $this->personTax;
     }
@@ -336,21 +336,24 @@ class Person
      * Author:LazyBench
      * 个人所得税税率计算个人所得税
      * @param  $total
-     * @param  $getPersonalTaxRateSettings
+     * @param  $taxRates
      * @return int|string
      */
-    protected function getPersonalTaxByCompany($total, $getPersonalTaxRateSettings)
+    protected function getPersonalTaxTotal($total, $taxRates)
     {
-        $maxLevel = count($getPersonalTaxRateSettings);
         $taxTotal = 0;
-        foreach ($getPersonalTaxRateSettings as $key => $getPersonalTaxRateSetting) {
-            $currentLevel = $key + 1;
-            if ($currentLevel === $maxLevel) {
+        $compare = $total;
+        foreach ($taxRates as $key => $taxRate) {
+            if ($taxRate['from'] > $compare) {
+                break;
+            }
+
+            if ($taxRate['from'] < $compare) {
                 $baseTaxTotal = $total;
             } else {
-                $baseTaxTotal = bcsub($getPersonalTaxRateSetting['to'], $getPersonalTaxRateSetting['from'], Tax::SCALE);
+                $baseTaxTotal = bcsub($taxRate['to'], $taxRate['from'], Tax::SCALE);
             }
-            $currentTax = bcmul($baseTaxTotal, $getPersonalTaxRateSetting['rate'], Tax::SCALE);
+            $currentTax = bcmul($baseTaxTotal, $taxRate['rate'], Tax::SCALE);
             $total = bcsub($total, $baseTaxTotal, Tax::SCALE);
             $taxTotal = bcadd($taxTotal, $currentTax, Tax::SCALE);
         }

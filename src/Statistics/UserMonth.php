@@ -142,10 +142,9 @@ class UserMonth implements \LazyBench\Tax\Interfaces\UserMonth
     /**
      * Author:LazyBench
      * 获取个人所得税率表
-     * @param $total
      * @return array|mixed
      */
-    public function getPersonalTaxRate($total)
+    public function getPersonalTaxRate()
     {
         //        $getPersonalTaxRateSettings = \ServiceChargeTable::find([
         //            'conditions' => '[from]<= :income: and company_id=0',
@@ -154,6 +153,32 @@ class UserMonth implements \LazyBench\Tax\Interfaces\UserMonth
         //            ],
         //            'order' => 'id ASC',
         //        ])->toArray();
-        return [];
+        return [
+            0 => [
+                'from' => '0',
+                'to' => '30000',
+                'rate' => '0.05',
+            ],
+            1 => [
+                'from' => '30000',
+                'to' => '90000',
+                'rate' => '0.10',
+            ],
+            2 => [
+                'from' => '90000',
+                'to' => '300000.00',
+                'rate' => '0.20',
+            ],
+            3 => [
+                'from' => '300000.00',
+                'to' => '500000.00',
+                'rate' => '0.30',
+            ],
+            4 => [
+                'from' => '500000.00',
+                'to' => '99999999.00',
+                'rate' => '0.35',
+            ],
+        ];
     }
 }

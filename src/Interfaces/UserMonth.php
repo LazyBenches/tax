@@ -91,8 +91,7 @@ interface UserMonth
     /**
      * Author:LazyBench
      *
-     * @param $personWage
      * @return mixed
      */
-    public function getPersonalTaxRate($personWage);
+    public function getPersonalTaxRate();
 }
