@@ -10,7 +10,6 @@
 namespace LazyBench\Tax\Calculate;
 
 use LazyBench\Tax\Constant\Tax;
-use LazyBench\Logic\TaxCalculateLogic;
 use LazyBench\Tax\Log\PersonLog;
 use LazyBench\Tax\Traits\Calculate;
 
@@ -28,24 +27,34 @@ class PersonIncomeBelow
     /**
      * PersonIncome constructor.
      * @param PersonLog $log
+     * @param PersonLog $belowLog
      */
-    public function __construct(PersonLog $log)
+    public function __construct(PersonLog $log, PersonLog $belowLog)
     {
         $this->log = $log;
-        $this->rateBelow = $this->getPersonWagesBelowRate();
+        $this->rateBelow = $this->getPersonWagesBelowRate($belowLog);
     }
 
     /**
      * Author:LazyBench
      * 不缴纳增值附加比例
-     * @param int $wages
+     * @param PersonLog $belowLog
      * @return string|null
      */
-    protected function getPersonWagesBelowRate()
+    protected function getPersonWagesBelowRate(PersonLog $belowLog)
     {
-        $log = TaxCalculateLogic::getPersonData(1);
-        return bcdiv($log->personIncomeLeft, 1, Tax::SCALE);
+        return bcdiv($belowLog->personIncomeLeft, 1, Tax::SCALE);
     }
+    //    /**
+    //     * Author:LazyBench
+    //     * 不缴纳增值附加比例
+    //     * @return string|null
+    //     */
+    //    protected function getPersonWagesBelowRate($log)
+    //    {
+    //        $log = TaxCalculateLogic::getPersonData(1);
+    //        return bcdiv($log->personIncomeLeft, 1, Tax::SCALE);
+    //    }
 
     /**
      * Author:LazyBench
@@ -60,30 +69,31 @@ class PersonIncomeBelow
     /**
      * Author:LazyBench
      * 按比例算出来的personIncome 是收入(不纳增值附加)中最高的，也就是说，personWages 是最小的,个人所得税缴纳最少的
+     * @param \LazyBench\Tax\Tax $tax
      * @return PersonLog
      */
-    public function handle()
+    public function handle(\LazyBench\Tax\Tax $tax)
     {
         $personWages = $this->getPersonWagesBelowCalculate();
-        $log = TaxCalculateLogic::getPersonData($personWages, $this->log->idCard, $this->log->month);
+        $log = $tax->getPersonData($personWages, $this->log->idCard, $this->log->month);
         if ($log->isAdd) {
             return $log;
         }
         $compare = bcsub($log->personIncomeLeft, $this->log->personIncomeLeft, Tax::SCALE);
-        if ($this->floor($compare, 3) == 0) {
+        if (!$this->floor($compare, 3)) {
             return $log;
         }
         $method = $compare < 0 ? 'bcsub' : 'bcadd';
-        if ($compare != 0) {
+        if (abs($compare)) {
             while (true) {
                 $diff = $compare / 2;
                 $personWages = $method($personWages, $diff, Tax::SCALE);
-                $log = TaxCalculateLogic::getPersonData($personWages, $this->log->idCard, $this->log->month);
+                $log = $tax->getPersonData($personWages, $this->log->idCard, $this->log->month);
                 $compare = bcSub($log->personIncomeLeft, $this->log->personIncomeLeft, Tax::SCALE);
                 if ($compare > 0 && bccomp($compare / 2, $diff, Tax::SCALE) === 1) {
                     $compare = bcSub($this->log->personIncomeLeft, $log->personIncomeLeft, Tax::SCALE);
                 }
-                if ($this->floor($compare, 3) == 0) {
+                if (!$this->floor($compare, 3)) {
                     break;
                 }
             }

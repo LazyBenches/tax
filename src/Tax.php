@@ -136,12 +136,13 @@ class Tax
         $log->isAdd = $isAdd;
         $log->idCard = $card;
         $log->month = $month;
-        $person = new PersonIncomeBelow($log);
+        $belowLog = $this->getPersonData(1);
+        $person = new PersonIncomeBelow($log, $belowLog);
         $person->setRates($this->config['person']['rate']);
         $person->setTaxExtReduceRate($this->config['person']['taxExtReduceRate']);
         $person->setBasisTax($this->config['person']['basisTax']);
         $person->setBasisTaxYear($this->config['person']['basisTaxYear']);
-        return $person->handle();
+        return $person->handle($this);
     }
 
     /**
@@ -165,7 +166,7 @@ class Tax
         $person->setTaxExtReduceRate($this->config['person']['taxExtReduceRate']);
         $person->setBasisTax($this->config['person']['basisTax']);
         $person->setBasisTaxYear($this->config['person']['basisTaxYear']);
-        return $person->handle($max);
+        return $person->handle($max, $this);
     }
 
 
