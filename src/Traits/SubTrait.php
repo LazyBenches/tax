@@ -20,11 +20,11 @@ trait SubTrait
      */
     public function ceil($amount, $scale = 2): string
     {
-        $array = explode('.', $amount);
-        $left = $array[1] ?? 0;
-        $newAmount = $array[0].'.'.($left > 0 ? 1 : 0);
+//        $array = explode('.', $amount);
+//        $left = $array[1] ?? 0;
+//        $amount = $array[0].'.'.($left > 0 ? 1 : 0);
         $base = 10 ** $scale;
-        return bcdiv(ceil(bcmul($newAmount, $base, 1)), $base, $scale);
+        return bcdiv(ceil(bcmul($amount, $base, 8)), $base, $scale);
     }
 
     /**
@@ -37,6 +37,6 @@ trait SubTrait
     public function floor($amount, $scale = 2)
     {
         $base = 10 ** $scale;
-        return bcdiv(floor(bcmul($amount, $base, 1)), $base, $scale);
+        return bcdiv(floor(bcmul($amount, $base, 8)), $base, $scale);
     }
 }
