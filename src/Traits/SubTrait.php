@@ -18,7 +18,7 @@ trait SubTrait
      * @return string
      * 向上保留
      */
-    protected function ceil($amount, $scale = 2): string
+    public function ceil($amount, $scale = 2): string
     {
         $array = explode('.', $amount);
         $left = $array[1] ?? 0;
@@ -34,7 +34,7 @@ trait SubTrait
      * @return string
      * 向下保留
      */
-    protected function floor($amount, $scale = 2)
+    public function floor($amount, $scale = 2)
     {
         $base = 10 ** $scale;
         return bcdiv(floor(bcmul($amount, $base, 1)), $base, $scale);
