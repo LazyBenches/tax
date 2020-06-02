@@ -11,14 +11,14 @@ class PersonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Author:LazyBench
-     * 103000 及以下
+     * 101000 及以下
      */
     public function testTax10300000()
     {
         $config = include(configPath.'config.php');
         $tax = new \LazyBench\Tax\Tax($config);
-        $personLog = $tax->getPersonData('103000', '51062319860226901X', '202006');
-        $this->assertEquals($tax->ceil($personLog->personIncome, 4), 102382, '103000 及以下 速算扣除 0.5%');
+        $personLog = $tax->getPersonData('101000', '51062319860226901X', '202006');
+        $this->assertEquals($tax->ceil($personLog->personIncome, 4), 100394, '101000 及以下 速算扣除 0.5%');
     }
 
     /**
@@ -29,8 +29,8 @@ class PersonTest extends \PHPUnit\Framework\TestCase
     {
         $config = include(configPath.'config.php');
         $tax = new \LazyBench\Tax\Tax($config);
-        $personLog = $tax->getPersonData('103001', '51062319860226901X', '202006');
-        $this->assertEquals($tax->ceil($personLog->personIncome, 4), 99040.96155, '103000以上 速算扣除 0.5%');
+        $personLog = $tax->getPersonData('101000.01', '51062319860226901X', '202006');
+        $this->assertEquals($tax->ceil($personLog->personIncome, 4), 99340.00984, '101000以上 速算扣除 0.5%');
     }
 
     /**
@@ -60,14 +60,14 @@ class PersonTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Author:LazyBench
-     * 103000 及以下
+     * 101000 及以下
      */
     public function testTaxBelow10300000()
     {
         $config = include(configPath.'config.php');
         $tax = new \LazyBench\Tax\Tax($config);
         $personLog = $tax->getPersonIncomeData('99220.00', '51062319860226901X', '202006', 0);
-        $this->assertEquals($tax->ceil($personLog->personIncome, 4), 99818.92, '103000 及以下 速算扣除 0.5%');
+        $this->assertEquals($tax->ceil($personLog->personIncome, 4), 99818.92, '101000 及以下 速算扣除 0.5%');
     }
 
     /**
@@ -82,6 +82,6 @@ class PersonTest extends \PHPUnit\Framework\TestCase
         $below = $tax->getPersonIncomeData($amount, '51062319860226901X', '202006', 0);
         $company = $tax->getCompanyData($amount);
         $personLog = $tax->getPersonIncomeAboveMatchData($company->taxAmount + $below->personWages, '99220.00', '51062319860226901X', '202006');
-        $this->assertEquals($tax->ceil($personLog->personWagesLeft, 4), 103000.01, '103000以上 速算扣除 0.5%');
+        $this->assertEquals($tax->ceil($personLog->personWagesLeft, 4), 101000.01, '103000以上 速算扣除 0.5%');
     }
 }

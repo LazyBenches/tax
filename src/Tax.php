@@ -82,6 +82,7 @@ class Tax
         $person->setTaxExtReduceRate($this->config['person']['taxExtReduceRate']);
         $person->setBasisTax($this->config['person']['basisTax']);
         $person->setBasisTaxYear($this->config['person']['basisTaxYear']);
+        $person->setBaseRate($this->config['person']['baseRate']);
         $person->handle($getPersonalTaxRateSettings);
         return $log;
     }
@@ -99,6 +100,8 @@ class Tax
         $company = new Company($log);
         $company->setRates($this->config['company']['rate']);
         $company->setTaxExtReduceRate($this->config['company']['taxExtReduceRate']);
+        $company->setBaseRate($this->config['company']['baseRate']);
+        $company->setAddedTaxRate($this->config['company']['addedTaxRate']);
         $company->handle();
         return $log;
     }
@@ -142,6 +145,8 @@ class Tax
         $person->setTaxExtReduceRate($this->config['person']['taxExtReduceRate']);
         $person->setBasisTax($this->config['person']['basisTax']);
         $person->setBasisTaxYear($this->config['person']['basisTaxYear']);
+        $person->setBaseRate($this->config['person']['baseRate']);
+        $person->setAddedTaxRate($this->config['person']['addedTaxRate']);
         return $person->handle($this);
     }
 
@@ -166,6 +171,8 @@ class Tax
         $person->setTaxExtReduceRate($this->config['person']['taxExtReduceRate']);
         $person->setBasisTax($this->config['person']['basisTax']);
         $person->setBasisTaxYear($this->config['person']['basisTaxYear']);
+        $person->setBaseRate($this->config['person']['baseRate']);
+        $person->setAddedTaxRate($this->config['person']['addedTaxRate']);
         return $person->handle($max, $this);
     }
 

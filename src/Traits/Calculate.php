@@ -14,7 +14,8 @@ trait Calculate
 
     protected static $basisTax = 100000;//月税基数
     protected static $basisTaxYear = 1200000;//年税基数
-
+    protected static $baseRate = 1.01;
+    protected static $addedTaxRate = 0.01; //企业增值税税率
     /**
      * 计税依据
      * Author:LazyBench
@@ -71,12 +72,12 @@ trait Calculate
      * Author:LazyBench
      * @param $amount
      * @return string
-     * 企业发放金额/1.03
+     * 企业发放金额
      */
     public function setTaxBasis($amount): string
     {
         if (!$this->taxBasis) {
-            $this->taxBasis = bcdiv($amount, 1.03, Tax::SCALE);
+            $this->taxBasis = bcdiv($amount, self::getBaseRate(), Tax::SCALE);
         }
         return $this->taxBasis;
     }
@@ -90,7 +91,7 @@ trait Calculate
     public function getTaxBasis($amount = 0)
     {
         if ($amount) {
-            return bcdiv($amount, 1.03, Tax::SCALE);
+            return bcdiv($amount, self::getBaseRate(), Tax::SCALE);
         }
         return $this->taxBasis;
     }
@@ -147,5 +148,25 @@ trait Calculate
     public static function getBasisTaxYear()
     {
         return self::$basisTaxYear;
+    }
+
+    public function setBaseRate($baseRate)
+    {
+        self::$baseRate = $baseRate;
+    }
+
+    public static function getBaseRate()
+    {
+        return self::$baseRate;
+    }
+
+    public function setAddedTaxRate($addedTaxRate)
+    {
+        self::$addedTaxRate = $addedTaxRate;
+    }
+
+    public static function getAddedTaxRate()
+    {
+        return self::$addedTaxRate;
     }
 }

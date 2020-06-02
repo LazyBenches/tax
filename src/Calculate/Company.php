@@ -106,8 +106,7 @@ class Company
     protected function getCompanyValueAddedTax()
     {
         if (!$this->companyValueAddedTax) {
-            $valueAddedTaxRate = 0.06; //企业增值税税率
-            $this->companyValueAddedTax = bcmul($this->companyPayment, $valueAddedTaxRate, Tax::SCALE);
+            $this->companyValueAddedTax = bcmul($this->companyPayment, self::$addedTaxRate, Tax::SCALE);
         }
         return $this->companyValueAddedTax;
     }

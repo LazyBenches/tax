@@ -256,7 +256,7 @@ class Person
         if ($this->addTax) {
             return $this->addTax;
         }
-        $this->addTax = bcmul($this->getTaxBasis($this->personWages), 0.03, Tax::SCALE);
+        $this->addTax = bcmul($this->getTaxBasis($this->personWages), self::getAddedTaxRate(), Tax::SCALE);
         return $this->addTax;
     }
 

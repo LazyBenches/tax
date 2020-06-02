@@ -9,6 +9,7 @@
 
 namespace LazyBench\Tax\Statistics;
 
+use LazyBench\Tax\Calculate\Person;
 use LazyBench\Tax\Constant\Tax;
 
 class UserMonth implements \LazyBench\Tax\Interfaces\UserMonth
@@ -33,7 +34,7 @@ class UserMonth implements \LazyBench\Tax\Interfaces\UserMonth
     public function getTaxBasis($amount = 0)
     {
         if ($amount) {
-            return bcdiv($amount, 1.03, Tax::SCALE);
+            return bcdiv($amount, Person::getBaseRate(), Tax::SCALE);
         }
         return 0;
     }

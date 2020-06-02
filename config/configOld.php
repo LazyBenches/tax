@@ -17,8 +17,8 @@ return [
         'taxExtReduceRate' => 0.5,//增值附加税减免比
         'basisTax' => 100000,//月税基数
         'basisTaxYear' => 1200000,//年税基数
-        'baseRate' => 1.01,
-        'addedTaxRate' => 0.01,
+        'baseRate' => 1.03,
+        'addedTaxRate' => 0.03,
     ],
     'company' => [
         'rate' => [
@@ -27,7 +27,7 @@ return [
             '3' => 0.02,
         ],
         'taxExtReduceRate' => 0,//增值附加税减免比
-        'baseRate' => 1.01,
-        'addedTaxRate' => 0.01,
+        'baseRate' => 1.03,
+        'addedTaxRate' => 0.03,
     ],
 ];
