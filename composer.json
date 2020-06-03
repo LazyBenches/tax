@@ -2,7 +2,9 @@
     "name": "lazybench/tax",
     "description": "tax",
     "require": {
-        "ext-bcmath": "*"
+        "ext-bcmath": "*",
+        "ext-zip": "*",
+        "phpoffice/phpspreadsheet": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.5"
