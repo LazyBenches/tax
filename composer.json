@@ -4,7 +4,7 @@
     "require": {
         "ext-bcmath": "*",
         "ext-zip": "*",
-        "phpoffice/phpspreadsheet": "dev-master"
+        "phpoffice/phpspreadsheet": "master"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.5"
