@@ -50,8 +50,7 @@ class Company
     /**
      * 企业印花税税率
      */
-    const STAMP_RATE = 0.0003;
-
+    protected $stampTaxRate;
     /**
      * 企业综合税费
      * Author:Robert
@@ -88,6 +87,10 @@ class Company
         return $this->log;
     }
 
+    public function setStampTaxRate($rate)
+    {
+        $this->stampTaxRate = $rate;
+    }
 
     /**
      * Author:LazyBench
@@ -139,7 +142,7 @@ class Company
             return $this->companyStampTax;
         }
         $total = bcadd($this->getCompanyValueAddedTax(), $this->companyPayment, Tax::SCALE);
-        $this->companyStampTax = bcmul($total, self::STAMP_RATE, Tax::SCALE);
+        $this->companyStampTax = bcmul($total, $this->stampTaxRate, Tax::SCALE);
         return $this->companyStampTax;
     }
 

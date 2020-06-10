@@ -101,6 +101,7 @@ class Tax
         $company->setRates($this->config['company']['rate']);
         $company->setTaxExtReduceRate($this->config['company']['taxExtReduceRate']);
         $company->setBaseRate($this->config['company']['baseRate']);
+        $company->setStampTaxRate($this->config['company']['stampTaxRate']);
         $company->setAddedTaxRate($this->config['company']['addedTaxRate']);
         $company->handle();
         return $log;
