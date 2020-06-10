@@ -84,6 +84,7 @@ class Company
         $this->log->stampTax = $this->getCompanyStampTax();//企业应缴印花税
         $this->log->taxAmount = $this->getCompanyTaxAmount();//企业综合税赋
         $this->log->poundageBase = $this->getCompanyExpenditure();//企业
+        $this->log->taxBasis = $this->taxBasis;
         return $this->log;
     }
 

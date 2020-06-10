@@ -52,4 +52,11 @@ class CompanyLog extends Log
      * @var
      */
     public $poundageBase;
+
+    /**
+     * Author:LazyBench
+     * 税基
+     * @var
+     */
+    public $taxBasis;
 }
