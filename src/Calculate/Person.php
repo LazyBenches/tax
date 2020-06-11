@@ -128,7 +128,6 @@ class Person
         $this->log->taxBase = $this->taxBase;
         $this->log->personTaxAmount = bcadd($this->log->personTax, bcadd($this->log->addTax, $this->log->addTaxExt, Tax::SCALE), Tax::SCALE);
         $this->log->personIncome = bcsub($this->log->personWages, $this->log->personTaxAmount, Tax::SCALE);
-
         //增值和附加 本次，当月，当月已缴纳
         $addTaxAlready = $this->log->monthTotal['personAddTax'] ?? 0;
         $this->log->addTaxLeft = bcsub($this->log->addTax, $addTaxAlready, Tax::SCALE);
@@ -140,12 +139,10 @@ class Person
         $this->log->personTaxAmountLeft = bcsub($this->log->personTaxAmount, $personTaxAmountAlready, Tax::SCALE);
         $personIncomeAlready = $this->log->monthTotal['personIncome'] ?? 0;
         $this->log->personIncomeLeft = bcsub($this->log->personIncome, $personIncomeAlready, Tax::SCALE);
-
         //增值减免
         $this->log->addTaxReduction = ltrim($this->getAddTaxReduction(), '-');//当月减免
         $addTaxReductionAlready = $this->log->monthTotal['personAddTaxIng'] ?? 0;//当月累计已减免
         $this->log->addTaxReductionLeft = bcsub($this->log->addTaxReduction, $addTaxReductionAlready, Tax::SCALE);
-
         //附加减免
         $this->log->addTaxExtReduction = ltrim($this->getAddTaxExtReduction(), '-');//当月减免
         $addTaxReductionExtAlready = $this->log->monthTotal['personAddTaxExtIng'] ?? 0;//当月累计已减免
