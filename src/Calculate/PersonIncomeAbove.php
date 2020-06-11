@@ -42,7 +42,8 @@ class PersonIncomeAbove
      */
     public function handle($personWages, \LazyBench\Tax\Tax $tax)
     {
-        $log = $tax->getPersonData($personWages, $this->log->idCard, $this->log->month);
+        $data = $tax->getStatistics()->getStaticMonth($personWages, $this->log->idCard, $this->log->month);
+        $log = $tax->getPersonData($personWages, $this->log->idCard, $this->log->month, $data);
         $log->personIncomeLeft = $this->floor($log->personIncomeLeft, 3);
         $compare = bcsub($log->personIncomeLeft, $this->log->personIncomeLeft, Tax::SCALE);
         if (!$this->floor($compare, 3)) {
@@ -58,7 +59,7 @@ class PersonIncomeAbove
                 }
                 $diff = $compare / 2;
                 $personWages = $method($personWages, $diff, Tax::SCALE);
-                $log = $tax->getPersonData($personWages, $this->log->idCard, $this->log->month);
+                $log = $tax->getPersonData($personWages, $this->log->idCard, $this->log->month, $data);
                 $log->personIncomeLeft = $this->floor($log->personIncomeLeft, 3);
                 $compare = bcSub($log->personIncomeLeft, $this->log->personIncomeLeft, Tax::SCALE);
                 if ($compare > 0 && bccomp($compare / 2, $diff, Tax::SCALE) === 1) {

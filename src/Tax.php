@@ -60,13 +60,11 @@ class Tax
      * @param $personWages
      * @param $card
      * @param $month
+     * @param $data
      * @return PersonLog
      */
-    public function getPersonData($personWages, $card = '', $month = ''): PersonLog
+    public function getPersonData($personWages, $card = '', $month = '', $data = []): PersonLog
     {
-        if ($card && $month) {
-            $data = $this->statistics->getStaticMonth($personWages, $card, $month);
-        }
         $getPersonalTaxRateSettings = $this->statistics->getPersonalTaxRate();
         $log = new PersonLog();
         $log->idCard = $card ?? '';
@@ -267,7 +265,8 @@ class Tax
      */
     public function getCompanyTotal($personWages, $card, $month, $rate): array
     {
-        $log = $this->getPersonData($personWages, $card, $month);
+        $data = $this->statistics->getStaticMonth($personWages, $card, $month);
+        $log = $this->getPersonData($personWages, $card, $month, $data);
         $companyLog = $this->getCompanyData($log->personWagesLeft);
         $poundageLog = $this->getPoundageData($companyLog->poundageBase, $rate);
         $total = bcadd($poundageLog->poundage, $companyLog->personWages, TaxConst::SCALE);
@@ -298,7 +297,8 @@ class Tax
      */
     public function calculate($personWages, $rate, $idCard, $month, \Closure $closure = null)
     {
-        $personLog = $this->getPersonData($personWages, $idCard, $month);
+        $data = $this->statistics->getStaticMonth($personWages, $idCard, $month);
+        $personLog = $this->getPersonData($personWages, $idCard, $month, $data);
         $companyLog = $this->getCompanyData($personWages);
         $poundageLog = $this->getPoundageData($companyLog->poundageBase, $rate);
         if ($closure) {
