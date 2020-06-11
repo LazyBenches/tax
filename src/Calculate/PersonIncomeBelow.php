@@ -95,7 +95,7 @@ class PersonIncomeBelow
                 if ($compare > 0 && bccomp($compare / 2, $diff, Tax::SCALE) === 1) {
                     $compare = bcSub($this->log->personIncomeLeft, $log->personIncomeLeft, Tax::SCALE);
                 }
-                if (!$this->floor($compare, $scale)) {
+                if ((int)$this->floor($compare, $scale) === 0) {
                     break;
                 }
             }
