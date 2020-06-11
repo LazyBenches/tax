@@ -70,9 +70,10 @@ class PersonIncomeBelow
      * Author:LazyBench
      * 按比例算出来的personIncome 是收入(不纳增值附加)中最高的，也就是说，personWages 是最小的,个人所得税缴纳最少的
      * @param \LazyBench\Tax\Tax $tax
+     * @param $scale
      * @return PersonLog
      */
-    public function handle(\LazyBench\Tax\Tax $tax)
+    public function handle(\LazyBench\Tax\Tax $tax, $scale = Tax::SCALE)
     {
         $personWages = $this->getPersonWagesBelowCalculate();
         $data = $tax->getStatistics()->getStaticMonth($personWages, $this->log->idCard, $this->log->month);
@@ -94,7 +95,7 @@ class PersonIncomeBelow
                 if ($compare > 0 && bccomp($compare / 2, $diff, Tax::SCALE) === 1) {
                     $compare = bcSub($this->log->personIncomeLeft, $log->personIncomeLeft, Tax::SCALE);
                 }
-                if (!$this->floor($compare, 3)) {
+                if (!$this->floor($compare, $scale)) {
                     break;
                 }
             }

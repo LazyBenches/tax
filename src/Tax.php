@@ -146,7 +146,7 @@ class Tax
         $person->setBasisTaxYear($this->config['person']['basisTaxYear']);
         $person->setBaseRate($this->config['person']['baseRate']);
         $person->setAddedTaxRate($this->config['person']['addedTaxRate']);
-        return $person->handle($this);
+        return $person->handle($this, 0);
     }
 
     /**
