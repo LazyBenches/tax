@@ -67,9 +67,9 @@ class Tax
     {
         $getPersonalTaxRateSettings = $this->statistics->getPersonalTaxRate();
         $log = new PersonLog();
-        $log->idCard = $card ?? '';
-        $log->month = $month ?? '';
-        $log->monthTotal = $data['thisMonth'] ?? null;
+        $log->idCard = $card ?: '';
+        $log->month = $month ?: '';
+        $log->monthTotal = $data['thisMonth'] ?? [];
         $log->isAdd = $data['isAdd'] ?? 0;
         $personWagesAlready = $data['thisMonth']['taxWages'] ?? 0;
         $log->personWages = bcadd($personWages, $personWagesAlready, TaxConst::SCALE);
