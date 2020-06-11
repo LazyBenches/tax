@@ -92,7 +92,7 @@ class PersonIncomeBelow
                 $personWages = $method($personWages, $diff, Tax::SCALE);
                 $log = $tax->getPersonData($personWages, $this->log->idCard, $this->log->month, $data);
                 $compare = bcSub($log->personIncomeLeft, $this->log->personIncomeLeft, Tax::SCALE);
-                if ($compare > 0 && bccomp($compare / 2, $diff, Tax::SCALE) === 1) {
+                if ($compare > 0 && bccomp($compare / 2, $diff, $scale) === 1) {
                     $compare = bcSub($this->log->personIncomeLeft, $log->personIncomeLeft, Tax::SCALE);
                 }
                 if (!$this->floor($compare, $scale)) {
