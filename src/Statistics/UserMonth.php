@@ -121,13 +121,12 @@ class UserMonth implements \LazyBench\Tax\Interfaces\UserMonth
     public function getStaticMonth($personWages, $card, $month)
     {
         if ($this->card !== $card || $this->month !== $month || $this->personWages !== $personWages) {
-            $user = new User();
             $taxBaseYearLastMonthTotal = $this->getTaxBaseYearTotal($card, $month);
             $personTaxLastTotal = $this->getLastPersonTaxTotal($card, $month);
             $thisMonth = $this->getThisMonth($card, $month);
             $personWages = bcadd($personWages, $thisMonth['taxWages'], Tax::SCALE);//月累计税前
             $basis = $this->getTaxBasis($personWages);
-            $isAdd = $user->isAddTax($basis, $this->getTaxBaseLastTenMonth($card, $month));
+            $isAdd = $this->isAddTax($basis, $this->getTaxBaseLastTenMonth($card, $month));
             $this->card = $card;
             $this->month = $month;
             $this->data = [
@@ -181,5 +180,54 @@ class UserMonth implements \LazyBench\Tax\Interfaces\UserMonth
                 'rate' => '0.35',
             ],
         ];
+    }
+
+    /**
+     * Author:LazyBench
+     * 是否缴纳增值附加
+     * @param $basis
+     * @param $taxBasis
+     * @return int
+     */
+    public function isAddTax($basis, $taxBasis = 0): int
+    {
+        $isAddTax = ($basis > Person::getBasisTax()) ?: false;//是否缴纳增值附加
+        if ($isAddTax) {
+            return 1;
+        }
+        if (bcadd($taxBasis, $basis, 2) > Person::getBasisTaxYear()) {
+            return 1;
+        }
+        return 0;
+    }
+
+
+    /**
+     * Author:LazyBench
+     * 应纳税额统计
+     * @param $incomeTotal
+     * @param $rate
+     * @return string
+     */
+    public function getTaxAmountTotal($incomeTotal, $rate): string
+    {
+        $taxBasis = bcmul($incomeTotal, Tax::RATE_DISCOUNT, Tax::SCALE);
+        return bcsub(bcmul($taxBasis, $rate / 100, Tax::SCALE), $this->rateMap[$rate], Tax::SCALE);
+    }
+
+
+    /**
+     * Author:LazyBench
+     * 税率
+     * @param $amount
+     * @return int|string
+     */
+    public function switchRate($amount)
+    {
+        foreach ($this->rowMap as $rate => $value) {
+            if ($amount > $value[0] && $amount <= $value[1]) {
+                return $rate;
+            }
+        }
     }
 }
