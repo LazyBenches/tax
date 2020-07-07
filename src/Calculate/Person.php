@@ -87,6 +87,27 @@ class Person
 
     /**
      * Author:LazyBench
+     * 个人所得税率档税率
+     * @var string
+     */
+    protected $personTaxRate;
+
+    /**
+     * Author:LazyBench
+     * 个人所得税率档
+     * @var
+     */
+    protected $personTaxRateKey = 0;
+
+    /**
+     * Author:LazyBench
+     * 个人所得税扣除
+     * @var string
+     */
+    protected $personTaxRateReduce;
+
+    /**
+     * Author:LazyBench
      *
      * @var PersonLog|null
      */
@@ -311,20 +332,52 @@ class Person
     /**
      * Author:LazyBench
      * @param $taxRateTable array
+     * @param $key
      * @return string
      * 个人所得税
      */
-    protected function getPersonTax($taxRateTable)
+    protected function getPersonTax($taxRateTable, $key = 0)
     {
         if ($this->personTax) {
             return $this->personTax;
         }
+        $this->setPersonTaxKey($key);
         $total = bcadd($this->taxBaseYearLastMonthTotal, $this->getTaxBaseMonth(), Tax::SCALE);
         $this->personTaxTotal = $this->getPersonalTaxTotal($total, $taxRateTable);
         $this->personTax = bcsub($this->personTaxTotal, $this->personTaxLastTotal, Tax::SCALE);
         return $this->personTax;
     }
 
+
+    //    /**
+    //     * Author:LazyBench
+    //     * 个人所得税税率计算个人所得税
+    //     * @param  $total
+    //     * @param  $taxRateTable
+    //     * @return int|string
+    //     */
+    //    protected function getPersonalTaxTotal($total, $taxRateTable)
+    //    {
+    //        $taxTotal = 0;
+    //        $compare = $total;
+    //        foreach ($taxRateTable as $key => $taxRate) {
+    //            if ($taxRate['from'] > $compare) {
+    //                break;
+    //            }
+    //            if ($taxRate['from'] < $compare) {
+    //                $baseTaxTotal = $total;
+    //            } else {
+    //                $baseTaxTotal = bcsub($taxRate['to'], $taxRate['from'], Tax::SCALE);
+    //            }
+    //            //            1)	应纳税所得额=收入总额×应税所得率
+    //            $currentTax = bcmul($baseTaxTotal, $taxRate['rate'], Tax::SCALE);
+    //            //            2)	应纳所得税额=应纳税所得额×适应税率-速算扣除数
+    //            $currentTax -= $taxRate['reduce'];
+    //            $total = bcsub($total, $baseTaxTotal, Tax::SCALE);
+    //            $taxTotal = bcadd($taxTotal, $currentTax, Tax::SCALE);
+    //        }
+    //        return $taxTotal;
+    //    }
 
     /**
      * Author:LazyBench
@@ -335,23 +388,48 @@ class Person
      */
     protected function getPersonalTaxTotal($total, $taxRateTable)
     {
-        $taxTotal = 0;
-        $compare = $total;
-        foreach ($taxRateTable as $key => $taxRate) {
-            if ($taxRate['from'] > $compare) {
-                break;
-            }
+        //        foreach ($taxRateTable as $key => $taxRate) {
+        //            if ($total <= $taxRate['from']) {
+        //                break;
+        //            }
+        //            if ($total > $taxRate['to']) {
+        //                continue;
+        //            }
+        //            $this->personTaxRate = $taxRate['rate'];
+        //            $this->personTaxRateReduce = $taxRate['reduce'];
+        //        }
 
-            if ($taxRate['from'] < $compare) {
-                $baseTaxTotal = $total;
-            } else {
-                $baseTaxTotal = bcsub($taxRate['to'], $taxRate['from'], Tax::SCALE);
-            }
-            $currentTax = bcmul($baseTaxTotal, $taxRate['rate'], Tax::SCALE);
-            $total = bcsub($total, $baseTaxTotal, Tax::SCALE);
-            $taxTotal = bcadd($taxTotal, $currentTax, Tax::SCALE);
-        }
+        $this->personTaxRate = $taxRateTable[[$this->personTaxRateKey]]['rate'];
+        $this->personTaxRateReduce = $taxRateTable[$this->personTaxRateKey]['reduce'];
+        $taxTotal = bcmul($total, $this->personTaxRate, Tax::SCALE) - $this->personTaxRateReduce;
         return $taxTotal;
     }
 
+    /**
+     * Author:LazyBench
+     *
+     * @param $total
+     * @param array $taxRateTable
+     * @return int|string
+     */
+    public function switchPersonTaxKey($total, array $taxRateTable)
+    {
+        foreach ($taxRateTable as $key => $taxRate) {
+            if ($total <= $taxRate['from']) {
+                break;
+            }
+            if ($total > $taxRate['to']) {
+                continue;
+            }
+            if ($total >= $taxRate['from'] && $total < $taxRate) {
+                return $key;
+            }
+        }
+        return 0;
+    }
+
+    public function setPersonTaxKey($key)
+    {
+        $this->personTaxRateKey = $key;
+    }
 }

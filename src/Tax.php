@@ -65,7 +65,7 @@ class Tax
      */
     public function getPersonData($personWages, $card = '', $month = '', $data = []): PersonLog
     {
-        $getPersonalTaxRateSettings = $this->statistics->getPersonalTaxRate();
+        $rateSettings = $this->statistics->getPersonalTaxRate();
         $log = new PersonLog();
         $log->idCard = $card ?: '';
         $log->month = $month ?: '';
@@ -81,7 +81,7 @@ class Tax
         $person->setBasisTax($this->config['person']['basisTax']);
         $person->setBasisTaxYear($this->config['person']['basisTaxYear']);
         $person->setBaseRate($this->config['person']['baseRate']);
-        $person->handle($getPersonalTaxRateSettings);
+        $person->handle($rateSettings);
         return $log;
     }
 
@@ -129,9 +129,10 @@ class Tax
      * @param $card
      * @param $month
      * @param int $isAdd
+     * @param int $key
      * @return PersonLog
      */
-    public function getPersonIncomeData($income, $card, $month, $isAdd = 0): PersonLog
+    public function getPersonIncomeData($income, $card, $month, $isAdd = 0,$key = 0): PersonLog
     {
         $log = new PersonLog();
         $log->personIncomeLeft = $income;
