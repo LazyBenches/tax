@@ -11,5 +11,5 @@ namespace LazyBench\Tax\Logging;
 
 interface LoggingInterface
 {
-    public function handle(array $handle);
+    public function handle(string $msg);
 }

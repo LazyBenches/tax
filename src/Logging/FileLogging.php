@@ -21,10 +21,10 @@ class FileLogging implements LoggingInterface
     /**
      * Author:LazyBench
      *
-     * @param $handle
+     * @param $msg
      */
-    public function handle(array $handle)
+    public function handle(string $msg)
     {
-        error_log(json_encode($handle), 3, $this->logFile);
+        error_log($msg, 3, $this->logFile);
     }
 }

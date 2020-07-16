@@ -113,7 +113,7 @@ class Client
         }
         if (isset($options['logDriver']['class']) && class_exists($options['logDriver']['class'])) {
             $driver = $options['logDriver']['class'];
-            $config = $options['logDriver']['config']??[];
+            $config = $options['logDriver']['config'] ?? [];
             $this->loggingDriver = new $driver($config);
         }
         if (isset($options['cacheFile'])) {
@@ -213,7 +213,8 @@ class Client
         return true;
     }
 
-    protected function clearTokenCache(){
+    protected function clearTokenCache()
+    {
         file_exists($this->cacheFile) && unlink($this->cacheFile);
     }
 
@@ -309,7 +310,7 @@ class Client
      *
      * @param $msg
      */
-    public function writeLog(array $msg)
+    public function writeLog(string $msg)
     {
         $this->loggingDriver->handle($msg);
     }
@@ -360,11 +361,9 @@ class Client
         }
         if ($this->loggingDriver) {
             $date = date('Y-m-d H:i:s');
-            $this->writeLog([
-                'request' => $this->requestInfo,
-                'response' => $this->response,
-                'date' => $date,
-            ]);
+            $this->writeLog("[date]->{$date}");
+            $this->writeLog("[response]->{$this->response}");
+            $this->writeLog("[request]->{$this->requestInfo}");
         }
         $curlErrorCode = curl_errno($ch);
         if ($curlErrorCode) {
