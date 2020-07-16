@@ -322,7 +322,7 @@ class Client
      */
     private function isSSL($url): bool
     {
-        return 0 !== strpos($url, 'https');
+        return 0 === strpos($url, 'https');
     }
 
     /**
