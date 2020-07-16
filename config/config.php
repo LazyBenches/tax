@@ -47,4 +47,17 @@ return [
         'addedTaxRate' => 0.01,
         'stampTaxRate' => 0.0003,////印花税
     ],
+    'revenue' => [
+        'connectTimeout' => 1,
+        'logDriver' => [
+            'filePath' => '/logs/api.history.log',
+            'class' => \LazyBench\Tax\Logging\FileLogging::class,
+        ],
+        'cacheFile' => '/logs/token',
+        'systemId' => '',
+        'gatewayUrl' => '',
+        'rsaPubPath' => '',
+        'appId' => '',
+        'appKey' => '',
+    ],
 ];
