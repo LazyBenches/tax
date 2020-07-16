@@ -136,13 +136,34 @@ class EmployerRequest extends BaseRequest implements RequestInterface
      */
     public function validate(): bool
     {
-        if (!in_array($this->companyType, ['0', '1',])) {
+        if (!in_array($this->companyType, ['0', '1',], true)) {
             $this->setMessage('companyType应该为0或者1的字符');
             return false;
         }
-        if (!$this->uuid || !$this->idNo || !$this->mobile || !$this->name || !$this->countryCode || !$this->licenceNo || !$this->companyName || !$this->companyAddress || !$this->companyAddressDetail || !$this->legalPersonName || !$this->registerCapital || !$this->registerDate || !$this->cityCode || !$this->businessScope || !$this->revenueDepartment || !$this->platFormRegisterDate || !$this->licenceImg) {
-            $this->setMessage(__CLASS__.'表单填写不完整');
-            return false;
+        $array = [
+            'uuid',
+            'idNo',
+            'mobile',
+            'name',
+            'countryCode',
+            'licenceNo',
+            'companyName',
+            'companyAddress',
+            'companyAddressDetail',
+            'legalPersonName',
+            'registerCapital',
+            'registerDate',
+            'cityCode',
+            'businessScope',
+            'revenueDepartment',
+            'platFormRegisterDate',
+            'licenceImg',
+        ];
+        foreach ($array as $key) {
+            if (!$this->{$key}) {
+                $this->setMessage(__CLASS__.'表单填写不完整'.$key);
+                return false;
+            }
         }
         return true;
     }
@@ -310,6 +331,7 @@ class EmployerRequest extends BaseRequest implements RequestInterface
     {
         $this->params['jyfw'] = $this->businessScope = $scope;
     }
+
     /**
      * Author:Robert
      *

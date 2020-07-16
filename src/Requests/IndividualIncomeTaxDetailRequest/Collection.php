@@ -100,9 +100,21 @@ class Collection extends BaseRequest implements CollectionInterface
             $this->setMessage(__CLASS__.'表单填写不完整');
             return false;
         }
-        if (!strlen($this->taxIncomeTotal) || !strlen($this->taxIncomeRate) || !strlen($this->taxBaseTotal) || !strlen($this->taxRate) || !strlen($this->deductedTotal) || !strlen($this->taxPayAbleTotal) || !strlen($this->taxPaidTotal) || !strlen($this->taxRefundedTotal)) {
-            $this->setMessage(__CLASS__.'表单填写不完整');
-            return false;
+        $array = [
+            'taxIncomeTotal',
+            'taxIncomeRate',
+            'taxBaseTotal',
+            'taxRate',
+            'deductedTotal',
+            'taxPayAbleTotal',
+            'taxPaidTotal',
+            'taxRefundedTotal',
+        ];
+        foreach ($array as $key) {
+            if (!strlen($this->{$key})) {
+                $this->setMessage(__CLASS__.'表单填写不完整'.$key);
+                return false;
+            }
         }
         return true;
     }

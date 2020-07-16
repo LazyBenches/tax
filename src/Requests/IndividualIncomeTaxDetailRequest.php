@@ -67,9 +67,23 @@ class IndividualIncomeTaxDetailRequest extends BaseRequest implements RequestInt
      */
     public function validate(): bool
     {
-        if (!$this->startDate || !$this->endDate || !$this->reportDate || !$this->platformName || !$this->platformLicenseNo || !$this->platformIndustryCode || !$this->platformCityCode || !$this->platformArea || !$this->revenueDepartment || !$this->collection) {
-            $this->setMessage(__CLASS__.'表单填写不完整');
-            return false;
+        $array = [
+            'startDate',
+            'endDate',
+            'reportDate',
+            'platformName',
+            'platformLicenseNo',
+            'platformIndustryCode',
+            'platformCityCode',
+            'platformArea',
+            'revenueDepartment',
+            'collection',
+        ];
+        foreach ($array as $key) {
+            if (!$this->{$key}) {
+                $this->setMessage(__CLASS__.'表单填写不完整'.$key);
+                return false;
+            }
         }
         return !$this->hasMessage();
     }

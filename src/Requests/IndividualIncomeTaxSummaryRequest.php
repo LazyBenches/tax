@@ -71,9 +71,19 @@ class IndividualIncomeTaxSummaryRequest extends BaseRequest implements RequestIn
      */
     public function validate(): bool
     {
-        if (!$this->collection || !$this->startDate || !$this->endDate || !$this->reportDate || !$this->companyName || !$this->companyLicenseNo) {
-            $this->setMessage(__CLASS__.'表单填写不完整');
-            return false;
+        $array = [
+            'collection',
+            'startDate',
+            'endDate',
+            'reportDate',
+            'companyName',
+            'companyLicenseNo',
+        ];
+        foreach ($array as $key) {
+            if (!$this->{$key}) {
+                $this->setMessage(__CLASS__.'表单填写不完整'.$key);
+                return false;
+            }
         }
         return !$this->hasMessage();
     }

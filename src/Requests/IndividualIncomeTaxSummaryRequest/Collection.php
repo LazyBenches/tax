@@ -51,9 +51,19 @@ class Collection extends BaseRequest implements CollectionInterface
      */
     public function validate(): bool
     {
-        if (!strlen($this->taxRate) || !strlen($this->peopleQuantity) || !strlen($this->taxIncomeTotal) || !strlen($this->taxPayAbleTotal) || !strlen($this->taxPaidTotal) || !strlen($this->taxRefundedTotal)) {
-            $this->setMessage(__CLASS__.'表单填写不完整');
-            return false;
+        $array = [
+            'taxRate ',
+            'peopleQuantity ',
+            'taxIncomeTotal ',
+            'taxPayAbleTotal ',
+            'taxPaidTotal ',
+            'taxRefundedTotal',
+        ];
+        foreach ($array as $key) {
+            if (null === $this->{$key}) {
+                $this->setMessage(__CLASS__.'表单填写不完整'.$key);
+                return false;
+            }
         }
         return true;
     }
