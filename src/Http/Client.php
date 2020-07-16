@@ -189,7 +189,7 @@ class Client
         if (!$cache) {
             return false;
         }
-        $data = unserialize($cache, null);
+        $data = unserialize($cache);
         $token = $data->token ?? '';
         $expiresAt = $data->expires_at ?? '';
         if (!$token || !$expiresAt || time() > strtotime($data->expires_at) - 3600) {
