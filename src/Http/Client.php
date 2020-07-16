@@ -362,8 +362,8 @@ class Client
         if ($this->loggingDriver) {
             $date = date('Y-m-d H:i:s');
             $this->writeLog("[date]->{$date}");
-            $this->writeLog("[response]->{$this->response}");
             $this->writeLog("[request]->{$this->requestInfo}");
+            $this->writeLog("[response]->{$this->response}");
         }
         $curlErrorCode = curl_errno($ch);
         if ($curlErrorCode) {
