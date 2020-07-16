@@ -160,17 +160,17 @@ class HirerRequest extends BaseRequest implements RequestInterface
     /**
      *
      */
-    const FEMALE_GENDER = 'FEMALE';
+    public const FEMALE_GENDER = 'FEMALE';
 
     /**
      *
      */
-    const MALE_GENDER = 'MALE';
+    public const MALE_GENDER = 'MALE';
 
     /**
      *
      */
-    const GENDER_MAP = [
+    public const GENDER_MAP = [
         self::MALE_GENDER => '男',
         self::FEMALE_GENDER => '女',
     ];
@@ -428,5 +428,15 @@ class HirerRequest extends BaseRequest implements RequestInterface
     public function registerDate(string $date)
     {
         $this->params['ptzcsj'] = $this->registerDate = $date;
+    }
+
+    /**
+     * Author:Robert
+     *
+     * @param CollectionInterface $collection
+     * @throws \Exception
+     */
+    public function addCollection(CollectionInterface $collection)
+    {
     }
 }

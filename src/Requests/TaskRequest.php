@@ -477,4 +477,13 @@ class TaskRequest extends BaseRequest implements RequestInterface
         $this->params['fwsj'] = $hour != '0' ? (string)$hour : '1';
         $this->params['fwfjsds'] = $timeUnit ? $timeUnit : '小时';
     }
+    /**
+     * Author:Robert
+     *
+     * @param CollectionInterface $collection
+     * @throws \Exception
+     */
+    public function addCollection(CollectionInterface $collection)
+    {
+    }
 }

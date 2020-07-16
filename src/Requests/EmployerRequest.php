@@ -310,4 +310,13 @@ class EmployerRequest extends BaseRequest implements RequestInterface
     {
         $this->params['jyfw'] = $this->businessScope = $scope;
     }
+    /**
+     * Author:Robert
+     *
+     * @param CollectionInterface $collection
+     * @throws \Exception
+     */
+    public function addCollection(CollectionInterface $collection)
+    {
+    }
 }

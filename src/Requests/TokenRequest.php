@@ -31,4 +31,13 @@ class TokenRequest extends BaseRequest implements RequestInterface
     {
         return 'getLpxx0001';
     }
+    /**
+     * Author:Robert
+     *
+     * @param CollectionInterface $collection
+     * @throws \Exception
+     */
+    public function addCollection(CollectionInterface $collection)
+    {
+    }
 }

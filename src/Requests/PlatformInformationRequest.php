@@ -426,4 +426,14 @@ class PlatformInformationRequest extends BaseRequest implements RequestInterface
     {
         $this->params['wz'] = $this->siteUrl = $url;
     }
+
+    /**
+     * Author:Robert
+     *
+     * @param CollectionInterface $collection
+     * @throws \Exception
+     */
+    public function addCollection(CollectionInterface $collection)
+    {
+    }
 }

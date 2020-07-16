@@ -2,7 +2,6 @@
 
 namespace LazyBench\Tax\Requests;
 
-use LazyBench\Tax\Requests\IndividualIncomeTaxDetailRequest\Collection;
 
 /**
  * 个人所得税详细信息接口
@@ -165,10 +164,10 @@ class IndividualIncomeTaxDetailRequest extends BaseRequest implements RequestInt
     /**
      * Author:Robert
      *
-     * @param Collection $collection
+     * @param CollectionInterface $collection
      * @throws \Exception
      */
-    public function addCollection(Collection $collection)
+    public function addCollection(CollectionInterface $collection)
     {
         if ($collection->validate() === false) {
             $this->setMessage($collection->getMessage());
