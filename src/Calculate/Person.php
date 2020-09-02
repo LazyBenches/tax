@@ -399,10 +399,9 @@ class Person
         //            $this->personTaxRateReduce = $taxRate['reduce'];
         //        }
 
-        $this->personTaxRate = $taxRateTable[[$this->personTaxRateKey]]['rate'];
+        $this->personTaxRate = $taxRateTable[$this->personTaxRateKey]['rate'];
         $this->personTaxRateReduce = $taxRateTable[$this->personTaxRateKey]['reduce'];
-        $taxTotal = bcmul($total, $this->personTaxRate, Tax::SCALE) - $this->personTaxRateReduce;
-        return $taxTotal;
+        return bcmul($total, $this->personTaxRate, Tax::SCALE) - $this->personTaxRateReduce;
     }
 
     /**
